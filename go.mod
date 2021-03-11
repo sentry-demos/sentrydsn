@@ -1,3 +1,3 @@
-module sentry-demos/sentrydsn
+module github.com/sentry-demos/sentrydsn
 
 go 1.16
