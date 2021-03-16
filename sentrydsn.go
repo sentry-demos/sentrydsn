@@ -157,7 +157,7 @@ func CheckPath(u *url.URL) (string, error) {
 
 		All of these clients utilize the  /api/<project_id>/store/  endpoint.
 		Given the test have a higher degree of certainty that we will not encounter the legacy api.
-		We currently throw below if we do.
+		We currently return an empty string for dsn.URL if api/store is encountered.
 
 		** Anticipates leading and trailing slashes **
 		https://develop.sentry.dev/sdk/store
