@@ -22,7 +22,7 @@ func myFunc(r *http.Request){
 
     myDSN := dsn.URL
 
-    if len(myDSN == 0){
+    if len(myDSN) == 0{
         //handle
     }
 
