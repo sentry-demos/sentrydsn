@@ -40,7 +40,6 @@ type User struct {
 // You will never use both to fill each of these values.
 // We parse headers first to find User info. This will return pk, sk, both or err if no pk is found.
 // If we err using headers we proceed to the QS. An Err here throws for the entire FromRequest operation.
-
 func FromRequest(r *http.Request) (*DSN, error) {
 
 	var user *User
