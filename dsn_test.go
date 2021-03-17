@@ -6,7 +6,6 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
-
 )
 
 //setup
@@ -22,8 +21,7 @@ type testRequest struct {
 var testTableLegacyUserInfo = []testRequest{
 	// sentry_secret & sentry_key in query string
 	{"https://sentry.io/api/1234/store/?sentry_secret=4784fbc50de2473f9977cfce8a9adce5&sentry_key=4784fbc50de2473f9977cfce8a9adce5&sentry_version=7",
-		[]string{"Sentry sentry_version=7","sentry_client=<client>","sentry_timestamp=1614144877.269",
-		},
+		[]string{"Sentry sentry_version=7", "sentry_client=<client>", "sentry_timestamp=1614144877.269"},
 
 		map[string]string{
 			"name": "testbody",
@@ -31,8 +29,7 @@ var testTableLegacyUserInfo = []testRequest{
 		"https://4784fbc50de2473f9977cfce8a9adce5:4784fbc50de2473f9977cfce8a9adce5@sentry.io/1234"},
 	//sentry_secret & sentry_key in X-SENTRY-AUTH header
 	{"https://o87286.ingest.sentry.io/api/1234/store/?&sentry_version=7",
-		[]string{"Sentry sentry_version=7","sentry_client=<client>","sentry_timestamp=1614144877.269","sentry_secret=4784fbc50de2473f9977cfce8a9adce5", "sentry_key=4784fbc50de2473f9977cfce8a9adce5",
-		},
+		[]string{"Sentry sentry_version=7", "sentry_client=<client>", "sentry_timestamp=1614144877.269", "sentry_secret=4784fbc50de2473f9977cfce8a9adce5", "sentry_key=4784fbc50de2473f9977cfce8a9adce5"},
 		map[string]string{
 			"name": "testbody",
 		}, "Testing user info in headers",
@@ -41,16 +38,14 @@ var testTableLegacyUserInfo = []testRequest{
 var testTableMissingUserInfo = []testRequest{
 	//ONLY sentry_secret in query string
 	{"https://sentry.io/api/1234/store/?sentry_secret=4784fbc50de2473f9977cfce8a9adce5&sentry_version=7",
-		[]string{"Sentry sentry_version=7","sentry_client=<client>","sentry_timestamp=1614144877.269",
-		},
+		[]string{"Sentry sentry_version=7", "sentry_client=<client>", "sentry_timestamp=1614144877.269"},
 		map[string]string{
 			"name": "testbody",
 		}, "ONLY sentry_secret in query string",
 		""},
 	//ONLY sentry_secret in X-SENTRY-AUTH header
 	{"https://sentry.io/api/1234/store/?&sentry_version=7",
-		[]string{"Sentry sentry_version=7","sentry_client=<client>","sentry_timestamp=1614144877.269","sentry_secret=4784fbc50de2473f9977cfce8a9adce5",
-		},
+		[]string{"Sentry sentry_version=7", "sentry_client=<client>", "sentry_timestamp=1614144877.269", "sentry_secret=4784fbc50de2473f9977cfce8a9adce5"},
 		map[string]string{
 			"name": "testbody",
 		}, "ONLY sentry_secret in X-SENTRY-AUTH header",
@@ -60,16 +55,14 @@ var testTableMissingUserInfo = []testRequest{
 var testTableProjectID = []testRequest{
 	// sentry_secret & sentry_key in query string
 	{"https://sentry.io/apistore/?sentry_secret=4784fbc50de2473f9977cfce8a9adce5&sentry_key=4784fbc50de2473f9977cfce8a9adce5&sentry_version=7",
-		[]string{"Sentry sentry_version=7","sentry_client=<client>","sentry_timestamp=1614144877.269",
-		},
+		[]string{"Sentry sentry_version=7", "sentry_client=<client>", "sentry_timestamp=1614144877.269"},
 		map[string]string{
 			"name": "testbody",
 		}, "Testing malformed api path",
 		"https://4784fbc50de2473f9977cfce8a9adce5:4784fbc50de2473f9977cfce8a9adce5@sentry.io"},
 	//sentry_secret & sentry_key in X-SENTRY-AUTH header
 	{"https://sentry.io//api//1234///store//?&sentry_version=7",
-		[]string{"Sentry sentry_version=7","sentry_client=<client>","sentry_timestamp=1614144877.269","sentry_secret=4784fbc50de2473f9977cfce8a9adce5", "sentry_key=4784fbc50de2473f9977cfce8a9adce5",
-		},
+		[]string{"Sentry sentry_version=7", "sentry_client=<client>", "sentry_timestamp=1614144877.269", "sentry_secret=4784fbc50de2473f9977cfce8a9adce5", "sentry_key=4784fbc50de2473f9977cfce8a9adce5"},
 		map[string]string{
 			"name": "testbody",
 		}, "Testing malformed api path",
@@ -78,8 +71,7 @@ var testTableProjectID = []testRequest{
 var testTableLegacy = []testRequest{
 	// sentry_secret & sentry_key in query string
 	{"https://sentry.io/api/store/?sentry_secret=4784fbc50de2473f9977cfce8a9adce5&sentry_key=4784fbc50de2473f9977cfce8a9adce5&sentry_version=7",
-		[]string{"Sentry sentry_version=7","sentry_client=<client>","sentry_timestamp=1614144877.269",
-		},
+		[]string{"Sentry sentry_version=7", "sentry_client=<client>", "sentry_timestamp=1614144877.269"},
 		map[string]string{
 			"name": "testbody",
 		}, "Testing legacy api path",
@@ -93,7 +85,7 @@ func TestLegacyUserRequest(t *testing.T) {
 		rb, _ := json.Marshal(test.body)
 		r := httptest.NewRequest("POST", test.url, bytes.NewBuffer(rb))
 		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ","))
-		got, _ :=FromRequest(r)
+		got, _ := FromRequest(r)
 
 		//check that legacy DSN is correct
 		if got.URL != test.expected {
@@ -136,7 +128,7 @@ func TestMissingProjectID(t *testing.T) {
 	}
 }
 
-func TestLegacyStoreAPI(t *testing.T){
+func TestLegacyStoreAPI(t *testing.T) {
 	for _, test := range testTableLegacy {
 		rb, _ := json.Marshal(test.body)
 		r := httptest.NewRequest("POST", test.url, bytes.NewBuffer(rb))
@@ -145,12 +137,9 @@ func TestLegacyStoreAPI(t *testing.T){
 		if err != nil {
 			t.Errorf("Expected -- %s -- Got %s", test.expected, err)
 
-		} else if len(got.URL) != 0{
-			t.Errorf("Expected -- %s -- Got %d", test.expected,len(got.URL))
-			
+		} else if len(got.URL) != 0 {
+			t.Errorf("Expected -- %s -- Got %d", test.expected, len(got.URL))
+
 		}
 	}
 }
-
-
-
