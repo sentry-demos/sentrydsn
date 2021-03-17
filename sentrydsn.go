@@ -81,6 +81,8 @@ func FromRequest(r *http.Request) (*DSN, error) {
 // It throws an error if nothing is found for pk as this is critical
 // Returns user struct with appropriate values or empty strings.
 func parseHeaders(h string) (*User, error) {
+	fmt.Println("*** HEADERS ***")
+	fmt.Println(h)
 	var sentryPublic string
 	var sentrySecret string
 
