@@ -91,6 +91,8 @@ func parseHeaders(h string) (*User, error) {
 	}
 
 	toArray := strings.Split(strings.Split(h, " ")[1], ",")
+	fmt.Println("*** After split ***")
+	fmt.Println(h)
 	//Anticipates header: Sentry <start-header-values,...>
 
 	for _, v := range toArray {
