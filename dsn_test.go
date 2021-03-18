@@ -84,7 +84,7 @@ func TestLegacyUserRequest(t *testing.T) {
 	for _, test := range testTableLegacyUserInfo {
 		rb, _ := json.Marshal(test.body)
 		r := httptest.NewRequest("POST", test.url, bytes.NewBuffer(rb))
-		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ","))
+		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ", "))
 		got, _ := FromRequest(r)
 
 		//check that legacy DSN is correct
@@ -100,7 +100,7 @@ func TestMissingPublicKey(t *testing.T) {
 	for _, test := range testTableMissingUserInfo {
 		rb, _ := json.Marshal(test.body)
 		r := httptest.NewRequest("POST", test.url, bytes.NewBuffer(rb))
-		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ","))
+		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ", "))
 		got, _ := FromRequest(r)
 		if got != nil {
 			t.Errorf("Expected -- %s -- Got %s", ErrMissingUser, got)
@@ -115,7 +115,7 @@ func TestMissingProjectID(t *testing.T) {
 	for _, test := range testTableProjectID {
 		rb, _ := json.Marshal(test.body)
 		r := httptest.NewRequest("POST", test.url, bytes.NewBuffer(rb))
-		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ","))
+		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ", "))
 		got, err := FromRequest(r)
 		if got != nil {
 			if got.URL != test.expected {
@@ -132,7 +132,7 @@ func TestLegacyStoreAPI(t *testing.T) {
 	for _, test := range testTableLegacy {
 		rb, _ := json.Marshal(test.body)
 		r := httptest.NewRequest("POST", test.url, bytes.NewBuffer(rb))
-		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ","))
+		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ", "))
 		got, err := FromRequest(r)
 		if err != nil {
 			t.Errorf("Expected -- %s -- Got %s", test.expected, err)

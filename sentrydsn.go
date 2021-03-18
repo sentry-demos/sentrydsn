@@ -81,8 +81,7 @@ func FromRequest(r *http.Request) (*DSN, error) {
 // It throws an error if nothing is found for pk as this is critical
 // Returns user struct with appropriate values or empty strings.
 func parseHeaders(h string) (*User, error) {
-	fmt.Println("*** HEADERS ***")
-	fmt.Println(h)
+
 	var sentryPublic string
 	var sentrySecret string
 
@@ -91,8 +90,6 @@ func parseHeaders(h string) (*User, error) {
 	}
 
 	toArray := strings.Split(strings.SplitN(h, " ", 2)[1], ",")
-	fmt.Println("*** After split ***")
-	fmt.Println(toArray)
 	//Anticipates header: Sentry <start-header-values,...>
 
 	for _, v := range toArray {
@@ -156,6 +153,7 @@ func parseQueryString(u *url.URL) (*User, error) {
 // raven-python 5.27.0
 // java Raven-Java 7.8.0-31c26
 // javascript raven-js 3.10.0
+// cocoa 4.3.3
 //
 // All of these clients utilize the  /api/<project_id>/store/  endpoint.
 // Given the test we have a higher degree of certainty that we will not encounter the legacy api
