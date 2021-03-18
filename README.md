@@ -1,6 +1,6 @@
-# dsn
+# sentrydsn
 
-Written to derive DSN keys from [requests](https://golang.org/pkg/net/http/#Request) forwarded from an on prem Sentry (8.13) store endpoint /api/{projectID}/store/.
+Written to derive DSN keys from [requests](https://golang.org/pkg/net/http/#Request) forwarded from an on premise Sentry (8.13).
 
 # implementation
 ```
@@ -37,7 +37,7 @@ func myFunc(r *http.Request){
 ```go test --v```
 
 # Limitations:
-1. Currently requests sent to the legacy /api/store/ will return a DSN struct with URL as empty ""
+1. Currently requests sent to the legacy /api/store/ as opposed to /api/{projectID}/store/ will return a DSN struct with URL as empty ""
 2. Module will currently not handle forwarded requests to the sentry API: /api/0/ 
 3. Module does not rewrite auth headers.
 
