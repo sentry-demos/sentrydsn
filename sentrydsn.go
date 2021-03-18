@@ -90,7 +90,7 @@ func parseHeaders(h string) (*User, error) {
 		return nil, ErrMissingUser
 	}
 
-	toArray := strings.Split(strings.Split(h, " ")[1], ",")
+	toArray := strings.Split(strings.SplitN(h, " ", 2)[1], ",")
 	fmt.Println("*** After split ***")
 	fmt.Println(toArray)
 	//Anticipates header: Sentry <start-header-values,...>
