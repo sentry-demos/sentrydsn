@@ -21,6 +21,7 @@ var pk_re = regexp.MustCompile(`sentry_key=([a-f0-9]{32})`)
 var sk_re = regexp.MustCompile(`sentry_secret=([a-f0-9]{32})`)
 var path_re = regexp.MustCompile(`\/api\/\d+\/store\/`)
 var legacy_re = regexp.MustCompile(`\/api\/store\/`)
+var envelope_re = regexp.MustCompile(`\/api\/\d+\/envelope\/`)
 
 type DSN struct {
 	URL       string //original dsn for incoming request
@@ -144,7 +145,7 @@ func parseQueryString(u *url.URL) (*User, error) {
 
 }
 
-// checkPath validates anticipated path structure /api/<project_id>/store/ OR /api/store/ and returns a projectID.
+// checkPath validates anticipated path structure /api/<project_id>/store/ OR /api/store/ OR /api/<project_id>/envelope/ and returns a projectID.
 // The legacy /api/store/ endpoint does not include project id.
 // This edge case is usually where a public key could be used to lookup project meta data
 // in Relay. As we are not in relay this is not an option.
@@ -163,8 +164,9 @@ func checkPath(u *url.URL) (string, error) {
 	path := u.Path
 	isValid := path_re.MatchString(path)
 	isValidLegacy := legacy_re.MatchString(path)
+	isValidEnvelope := envelope_re.MatchString(path)
 
-	if !isValid {
+	if !isValid && !isValidEnvelope {
 		if isValidLegacy {
 			return "", nil
 		}
