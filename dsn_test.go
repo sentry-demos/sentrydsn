@@ -78,6 +78,23 @@ var testTableLegacy = []testRequest{
 		"len(dsn.URL) == 0"},
 }
 
+var testTableEnvelopeEndpoint = []testRequest{
+	//ONLY sentry_secret in query string
+	{"https://sentry.io/api/1234/envelope/?sentry_secret=4784fbc50de2473f9977cfce8a9adce5&sentry_key=4784fbc50de2473f9977cfce8a9adce5&sentry_version=7",
+		[]string{"Sentry sentry_version=7", "sentry_client=<client>", "sentry_timestamp=1614144877.269"},
+		map[string]string{
+			"name": "testbody",
+		}, "ONLY sentry_secret in query string",
+		"https://4784fbc50de2473f9977cfce8a9adce5:4784fbc50de2473f9977cfce8a9adce5@sentry.io/1234"},
+	//ONLY sentry_secret in X-SENTRY-AUTH header
+	{"https://sentry.io/api/1234/envelope/?&sentry_version=7",
+		[]string{"Sentry sentry_version=7", "sentry_client=<client>", "sentry_timestamp=1614144877.269", "sentry_secret=4784fbc50de2473f9977cfce8a9adce5"},
+		map[string]string{
+			"name": "testbody",
+		}, "ONLY sentry_secret in X-SENTRY-AUTH header",
+		""},
+}
+
 //tests
 
 func TestLegacyUserRequest(t *testing.T) {
@@ -140,6 +157,22 @@ func TestLegacyStoreAPI(t *testing.T) {
 		} else if len(got.URL) != 0 {
 			t.Errorf("Expected -- %s -- Got %d", test.expected, len(got.URL))
 
+		}
+	}
+}
+
+func TestEnvelopeEndpoint(t *testing.T) {
+	for _, test := range testTableEnvelopeEndpoint {
+		rb, _ := json.Marshal(test.body)
+		r := httptest.NewRequest("POST", test.url, bytes.NewBuffer(rb))
+		r.Header.Set("X-SENTRY-AUTH", strings.Join(test.header, ", "))
+		got, err := FromRequest(r)
+		if err != nil {
+			if err != ErrMissingUser {
+				t.Errorf("Expected -- %s -- Got %s", ErrMissingUser, err)
+			}
+		} else if got.URL != test.expected {
+			t.Errorf("Expected -- %s -- Got %s", test.expected, got.URL)
 		}
 	}
 }
